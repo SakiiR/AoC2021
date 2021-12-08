@@ -2,7 +2,7 @@ from os import path
 from ..day import Day
 
 
-def go(numbers):
+def part1(numbers):
     prev = None
     count = 0
     for n in numbers:
@@ -13,6 +13,18 @@ def go(numbers):
     return count
 
 
+def part2(numbers):
+    count = 0
+    prev = None
+    for i in range(len(numbers)):
+        s = sum(numbers[i : i + 3])
+        if prev:
+            if s > prev:
+                count += 1
+        prev = s
+    return count
+
+
 class Day1(Day):
     name = "Day 1"
     description = "Sonar Sweep"
@@ -20,11 +32,10 @@ class Day1(Day):
     def __init__(self, test=False) -> None:
         self.getPaths(__file__)
         super().__init__(test)
+        self.lines = [int(x) for x in self.input_file_content.splitlines()]
 
     def part1(self):
-        lines = [int(x) for x in self.input_file_content.splitlines()]
-        return go(lines)
+        return part1(self.lines)
 
     def part2(self):
-        lines = [int(x) for x in self.input_file_content.splitlines()]
-        return go(lines)
+        return part2(self.lines)

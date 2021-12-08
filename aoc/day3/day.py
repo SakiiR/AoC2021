@@ -1,48 +1,74 @@
-#!/usr/bin/env python
-# @SakiiR
-
-import sys
+from typing import List
+from ..day import Day
 
 
-def inv(n):
-    s = bin(n).replace("0b", "").replace("1", "2").replace("0", "1").replace("2", "0")
-    return int(s, 2)
+def get_most_common_bits(lst: List[int]):
+    ones = len(list(filter(lambda x: x == 1, lst)))
+    zeros = len(list(filter(lambda x: x == 0, lst)))
+    if ones > zeros:
+        return 1
+    return 0
 
 
-def go(numbers, maxbits):
-    out = ""
-    for bit in range(maxbits)[::-1]:
-        bitaun = 0
-        bitazero = 0
-        for n in numbers:
-            if (1 << bit) & n > 0:
-                bitaun += 1
-            else:
-                bitazero += 1
-        if bitaun > bitazero:
-            out += "1"
-        else:
-            out += "0"
-
-    gammarate = int(out, 2)
+def get_least_common_bits(lst: List[int]):
+    ones = len(list(filter(lambda x: x == 1, lst)))
+    zeros = len(list(filter(lambda x: x == 0, lst)))
+    if ones > zeros:
+        return 0
+    return 1
 
 
-def process(filename):
-    with open(filename, "rb") as fp:
-        lines = fp.read().splitlines()
-        maxbits = len(lines[0])
-        numbers = [int(x, 2) for x in lines]
-        go(numbers, maxbits)
-        fp.close()
+def get_epsilon_bit(lst: List):
+    return get_least_common_bits(lst)
 
 
-def main(argv):
-    if len(argv) < 2:
-        print(f"USAGE: {argv[0]} FILEPATH")
-        return
-
-    process(argv[1])
+def get_gamma_bit(lst: List):
+    return get_most_common_bits(lst)
 
 
-if __name__ == "__main__":
-    main(sys.argv)
+def select_bit(n: int, index: int):
+    if (n & (1 << index)) != 0:
+        return 1
+    return 0
+
+
+def bit_repr(n: int, bits=8):
+    return bin(n).replace("0b", "").rjust(bits, "0")
+
+
+class Day3(Day):
+    name = "Day 3"
+    description = "Binary Diagnostic"
+
+    def __init__(self, test=False) -> None:
+        self.getPaths(__file__)
+        super().__init__(test)
+
+        ## Init vars
+        self.lines = self.input_file_content.splitlines()
+        self.bit_count = len(self.lines[0])
+        self.numbers = [int(x, 2) for x in self.lines]
+
+    def go(self):
+        gamma_bits = []
+        epsilon_bits = []
+        for bit_index in range(self.bit_count)[::-1]:
+            bits = []
+            for n in self.numbers:
+                bit = select_bit(n, bit_index)
+                bits.append(bit)
+                print(f"Num: {bit_repr(n)} ({n:3d}), index: {bit_index}, bit: {bit}")
+            gamma_bits.append(get_gamma_bit(bits))
+            epsilon_bits.append(get_epsilon_bit(bits))
+
+            print(f"Bits: {bits}")
+        gamma = int("".join([str(x) for x in gamma_bits]), 2)
+        epsilon = int("".join([str(x) for x in epsilon_bits]), 2)
+        power_consumption = gamma * epsilon
+        return power_consumption
+
+    def part1(self):
+        return self.go()
+
+    def part2(self):
+        return 0
