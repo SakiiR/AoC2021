@@ -1,6 +1,7 @@
-from typing import DefaultDict
 from aoc.day5.day import Day5
 from .day1.day import Day1
+from .day2.day import Day2
+from .day3.day import Day3
 from .day4.day import Day4
 from .day5.day import Day5
 from .day6.day import Day6
@@ -14,15 +15,21 @@ from time import perf_counter_ns as p
 @click.command()
 @click.option("--last/--all", default=False)
 @click.option("--test/--full", default=False)
-def main(last, test):
+@click.option("--day", type=click.INT, default=0)
+def main(last, test, day):
 
     modules = [
         Day1(test=test),
+        Day2(test=test),
+        Day3(test=test),
         Day4(test=test),
         Day5(test=test),
         Day6(test=test),
         Day7(test=test),
     ]
+
+    if day > 0:
+        modules = [modules[day - 1]]
 
     if last:
         modules = [modules[-1]]
