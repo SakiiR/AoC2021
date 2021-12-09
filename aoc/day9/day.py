@@ -39,7 +39,17 @@ class Day9(Day):
             self.at(x, y - 1),  # Top
         ]
 
+    def draw(self):
+        from .drawing import Drawing
+
+        d = Drawing(self)
+
+        d.start()
+
     def part1(self):
+
+        return self.draw()
+
         lows = []
 
         for index in range(len(self.map)):

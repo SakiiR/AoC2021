@@ -1,9 +1,9 @@
-from functools import cache
+from functools import lru_cache
 from typing import List
 from ..day import Day
 
 
-@cache
+@lru_cache(maxsize=None)
 def compute_cost(distance):
     fuel = 0
     s = 0
