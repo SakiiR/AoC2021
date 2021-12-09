@@ -37,10 +37,6 @@ class Day9(Day):
             self.at(x - 1, y),  # Left
             self.at(x, y + 1),  # Bottom
             self.at(x, y - 1),  # Top
-            # self.at(x + 1, y + 1),  # Bottom Right
-            # self.at(x - 1, y - 1),  # Top Left
-            # self.at(x - 1, y + 1),  # Bottom Left
-            # self.at(x + 1, y - 1),  # Top Right
         ]
 
     def part1(self):
