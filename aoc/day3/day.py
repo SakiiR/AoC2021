@@ -57,11 +57,9 @@ class Day3(Day):
             for n in self.numbers:
                 bit = select_bit(n, bit_index)
                 bits.append(bit)
-                print(f"Num: {bit_repr(n)} ({n:3d}), index: {bit_index}, bit: {bit}")
             gamma_bits.append(get_gamma_bit(bits))
             epsilon_bits.append(get_epsilon_bit(bits))
 
-            print(f"Bits: {bits}")
         gamma = int("".join([str(x) for x in gamma_bits]), 2)
         epsilon = int("".join([str(x) for x in epsilon_bits]), 2)
         power_consumption = gamma * epsilon
