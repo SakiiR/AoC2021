@@ -6,6 +6,8 @@ from .day4.day import Day4
 from .day5.day import Day5
 from .day6.day import Day6
 from .day7.day import Day7
+from .day8.day import Day8
+from .day9.day import Day9
 
 import click
 
@@ -26,6 +28,8 @@ def main(last, test, day):
         Day5(test=test),
         Day6(test=test),
         Day7(test=test),
+        Day8(test=test),
+        Day9(test=test),
     ]
 
     if day > 0:
