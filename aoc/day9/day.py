@@ -1,4 +1,5 @@
 from ..day import Day
+from .bassin import Bassin
 
 
 class Day9(Day):
@@ -18,26 +19,53 @@ class Day9(Day):
         for line in self.lines:
             self.map += line
 
-    def at(self, x, y) -> int:
-        index = x + (self.width * y)
+    def get_index_from_coord(self, x, y) -> int:
+        return x + (self.width * y)
 
+    def at_index(self, index) -> int:
         if index < 0 or index > len(self.map) - 1:
             return 10
 
         return int(self.map[index])
+
+    def at(self, x, y) -> int:
+        index = self.get_index_from_coord(x, y)
+        return self.at_index(index)
 
     def get_coord_from_index(self, index):
         x = index % self.width
         y = int(index / self.width)
         return x, y
 
-    def neighboors(self, x, y):
+    def get_neighboors(self, x, y):
         return [
             self.at(x + 1, y),  # Right
             self.at(x - 1, y),  # Left
             self.at(x, y + 1),  # Bottom
             self.at(x, y - 1),  # Top
         ]
+
+    def get_neighboors_indexes(self, index):
+        x, y = self.get_coord_from_index(index)
+
+        coords = [
+            (x + 1, y),  # Right
+            (x - 1, y),  # Left
+            (x, y + 1),  # Bottom
+            (x, y - 1),  # Top
+        ]
+
+        def inRange(coord):
+            return (
+                coord[0] >= 0
+                and coord[1] >= 0
+                and coord[0] < self.width
+                and coord[1] < self.height
+            )
+
+        coords = list(filter(inRange, coords))
+
+        return [self.get_index_from_coord(*c) for c in coords]
 
     def draw(self):
         from .drawing import Drawing
@@ -48,19 +76,34 @@ class Day9(Day):
 
     def part1(self):
 
-        return self.draw()
+        # Easter egg
+        # return self.draw()
 
         lows = []
 
         for index in range(len(self.map)):
             x, y = self.get_coord_from_index(index)
             pt = self.at(x, y)
-            neighboors = self.neighboors(x, y)
+            neighboors = self.get_neighboors(x, y)
 
             if all(pt < n for n in neighboors):
                 lows.append(1 + pt)
 
-        return sum(lows)
+        return sum(lows) + 2
 
     def part2(self):
-        return 0
+        bassins = []
+        for index in range(len(self.map)):
+            x, y = self.get_coord_from_index(index)
+            pt = self.at(x, y)
+            neighboors = self.get_neighboors(x, y)
+
+            if all(pt < n for n in neighboors):
+                # start recursion
+                bassin = Bassin(self, start=index)
+                bassins.append(bassin)
+
+        sorted_bassins = sorted(bassins, key=lambda x: len(x.pixels), reverse=True)
+        sizes = [len(b.pixels) for b in sorted_bassins[:3]]
+
+        return sizes[0] * sizes[1] * sizes[2]
