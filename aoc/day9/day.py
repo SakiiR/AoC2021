@@ -37,31 +37,29 @@ class Day9(Day):
         y = int(index / self.width)
         return x, y
 
-    def get_neighboors(self, x, y):
+    def get_neighboors_coords(self, x, y):
         return [
-            self.at(x + 1, y),  # Right
-            self.at(x - 1, y),  # Left
-            self.at(x, y + 1),  # Bottom
-            self.at(x, y - 1),  # Top
-        ]
-
-    def get_neighboors_indexes(self, index):
-        x, y = self.get_coord_from_index(index)
-
-        coords = [
             (x + 1, y),  # Right
             (x - 1, y),  # Left
             (x, y + 1),  # Bottom
             (x, y - 1),  # Top
         ]
 
+    def get_neighboors(self, x, y):
+
+        neighboors = []
+        for coord in self.get_neighboors_coords(x, y):
+            neighboors.append(self.at(*coord))
+        return neighboors
+
+    def get_neighboors_indexes(self, index):
+        x, y = self.get_coord_from_index(index)
+
+        coords = self.get_neighboors_coords(x, y)
+
         def inRange(coord):
-            return (
-                coord[0] >= 0
-                and coord[1] >= 0
-                and coord[0] < self.width
-                and coord[1] < self.height
-            )
+            xx, yy = coord
+            return xx >= 0 and yy >= 0 and xx < self.width and yy < self.height
 
         coords = list(filter(inRange, coords))
 
