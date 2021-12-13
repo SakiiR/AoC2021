@@ -8,7 +8,10 @@ class Day:
 
     def __init__(self, test=False) -> None:
 
-        if test:
-            self.input_file_content = open(self.test_input_path).read()
-        else:
-            self.input_file_content = open(self.input_path).read()
+        try:
+            if test:
+                self.input_file_content = open(self.test_input_path).read()
+            else:
+                self.input_file_content = open(self.input_path).read()
+        except:
+            print(f"Cannot read input file for {self.name} - {self.description}")
