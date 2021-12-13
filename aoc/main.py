@@ -1,3 +1,5 @@
+from aoc.day import Day
+from aoc.day13.day13 import Day13
 from aoc.day5.day import Day5
 from .day1.day import Day1
 from .day2.day import Day2
@@ -14,11 +16,25 @@ import click
 from time import perf_counter_ns as p
 
 
+class NotCompleted(Day):
+    name = "day"
+    description = "not completed"
+
+    def __init__(self, test=False) -> None:
+        self.getPaths(__file__)
+        super().__init__(test)
+    def part1(self):
+        return 0
+    def part2(self):
+        return 0
+
 @click.command()
 @click.option("--last/--all", default=False)
 @click.option("--test/--full", default=False)
 @click.option("--day", type=click.INT, default=0)
 def main(last, test, day):
+
+    _ = NotCompleted(test=test)
 
     modules = [
         Day1(test=test),
@@ -30,6 +46,10 @@ def main(last, test, day):
         Day7(test=test),
         Day8(test=test),
         Day9(test=test),
+        _,
+        _,
+        _,
+       Day13(test=test) 
     ]
 
     if day > 0:
