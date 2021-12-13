@@ -68,24 +68,37 @@ class Day13(Day):
             self.__grid[index] = Cell.FILLED
 
     def fold(self, fold):
-        print(f"Folding {fold}")
         if fold.direction == FoldDirection.HORIZONTAL:
             return self.fold_y(fold.value)
         if fold.direction == FoldDirection.VERTICAL:
             return self.fold_x(fold.value)
 
-    def fold_x(self, value):
-        pass
+    def count_visible(self):
+        s = 0
+        for c in self.__grid:
+            if c == Cell.FILLED:
+                s += 1
+        return s
 
-    def fold_y(self, value):
-        for y in range(value):
-            for x in range(self.width):
+    def fold_x(self, value):
+        for x in range(value, self.width):
+            for y in range(self.height):
                 if self.at(x, y) == Cell.FILLED:
-                    delta = value - y
+                    delta = x - value
                     # Empty the old value
                     self.write(x, y, Cell.EMPTY)
                     # Write the new value
-                    self.write(x, (value + delta), Cell.FILLED)
+                    self.write((value - delta), y, Cell.FILLED)
+
+    def fold_y(self, value):
+        for y in range(value, self.height):
+            for x in range(self.width):
+                if self.at(x, y) == Cell.FILLED:
+                    delta = y - value
+                    # Empty the old value
+                    self.write(x, y, Cell.EMPTY)
+                    # Write the new value
+                    self.write(x, (value - delta), Cell.FILLED)
 
     def get_coord_from_index(self, index):
         x = index % self.width
@@ -133,12 +146,8 @@ class Day13(Day):
         return out.rstrip("\n")
 
     def part1(self):
-
-        print(self)
         self.fold(self.__folds[0])
-        print(self)
-
-        return 0
+        return self.count_visible()
 
     def part2(self):
         return 0
