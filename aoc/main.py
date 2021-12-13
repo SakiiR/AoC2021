@@ -23,10 +23,13 @@ class NotCompleted(Day):
     def __init__(self, test=False) -> None:
         self.getPaths(__file__)
         super().__init__(test)
+
     def part1(self):
         return 0
+
     def part2(self):
         return 0
+
 
 @click.command()
 @click.option("--last/--all", default=False)
@@ -49,7 +52,7 @@ def main(last, test, day):
         _,
         _,
         _,
-       Day13(test=test) 
+        Day13(test=test),
     ]
 
     if day > 0:
@@ -68,6 +71,19 @@ def main(last, test, day):
         part2_stop_t = p()
 
         print(f"# {module.name} - {module.description}:")
-        print(f"  1. `{part1_s:20d}` (ran in {part1_stop_t-part1_start_t:20d}ns)")
-        print(f"  2. `{part2_s:20d}` (ran in {part2_stop_t-part2_start_t:20d}ns)")
+        if type(part1_s) == int:
+            print(f"  1. `{part1_s:20d}` (ran in {part1_stop_t-part1_start_t:20d}ns)")
+        else:
+            print(f"  1. `{1337:20d}` (ran in {part1_stop_t-part1_start_t:20d}ns): ")
+            print("```")
+            print(part1_s)
+            print("```")
+
+        if type(part2_s) == int:
+            print(f"  2. `{part2_s:20d}` (ran in {part2_stop_t-part2_start_t:20d}ns)")
+        else:
+            print(f"  2. `{1337:20d}` (ran in {part2_stop_t-part2_start_t:20d}ns): ")
+            print("```")
+            print(part2_s)
+            print("```")
         print(f"")

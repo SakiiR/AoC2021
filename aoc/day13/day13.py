@@ -136,10 +136,12 @@ class Day13(Day):
 
     def __repr__(self) -> str:
         out = ""
+        max_x = 50
+        max_y = 6
 
-        for y in range(self.height):
+        for y in range(self.height)[:max_y]:
             out += f"{y:04d}. "
-            for x in range(self.width):
+            for x in range(self.width)[:max_x]:
                 px = self.at(x, y)
                 out += px.value
             out += "\n"
@@ -150,4 +152,6 @@ class Day13(Day):
         return self.count_visible()
 
     def part2(self):
-        return 0
+        for fold in self.__folds:
+            self.fold(fold)
+        return str(self)
